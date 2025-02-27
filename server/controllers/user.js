@@ -2,9 +2,9 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
 const registerUser = async (req, res) => {
-  const { email, password, role, firstName, lastName } = req.body;
-  const { organizationId } = req.user; // From auth middleware
-
+  console.log('here')
+  const { organizationId, email, password, role, firstName, lastName } = req.body;
+  console.log(req.body)
   try {
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -17,6 +17,7 @@ const registerUser = async (req, res) => {
     });
     res.status(201).json({ user });
   } catch (err) {
+    console.log(err.message)
     res.status(500).json({ message: 'Failed to register user', error: err.message });
   }
 };
