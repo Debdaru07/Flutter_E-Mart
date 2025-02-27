@@ -7,6 +7,7 @@ const registerOrganization = async (req, res) => {
     res.status(201).json({ organization });
   } catch (err) {
     res.status(500).json({ message: 'Failed to register organization', error: err.message });
+    console.log('err', err.message)
   }
 };
 

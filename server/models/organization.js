@@ -15,7 +15,7 @@ const Organization = sequelize.define('Organization', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  subscriptionPlan: {
+  subscriptionplan: {
     type: DataTypes.ENUM('basic', 'premium', 'enterprise'),
     defaultValue: 'basic',
   },
