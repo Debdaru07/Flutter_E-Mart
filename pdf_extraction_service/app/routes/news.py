@@ -1,38 +1,102 @@
 import logging
+import io
 from flask import Blueprint, request, jsonify
-from ..services.pdfco_service import upload_file_to_pdfco, extract_text_from_pdf
-from ..services.parser_service import parse_news_content
+from ..services.text_extraction_service import extract_text_from_pdf
+from ..services.image_extraction_service import extract_images_from_pdf
 
 news_bp = Blueprint('news', __name__)
 
 @news_bp.route('/extract_news', methods=['POST'])
 def extract_news():
-    logging.debug(f"Request headers: {request.headers}")
+    """Extracts text and images from an uploaded PDF file and structures the output accordingly."""
+    logging.debug(f"Request received with headers: {request.headers}")
 
-    # Check if 'file' is in the request
     if 'file' not in request.files:
         return jsonify({"error": "No file provided"}), 400
 
-    uploaded_file = request.files['file']  # Get file from form-data
-
+    uploaded_file = request.files['file']
     if uploaded_file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
     try:
-        # Read file content
-        file_content = uploaded_file.read()
+        # Read file into memory
+        file_data = io.BytesIO(uploaded_file.read())
 
-        # Upload file to PDF.co
-        pdf_url = upload_file_to_pdfco(file_content, uploaded_file.filename)
-        extracted_text = extract_text_from_pdf(pdf_url)
+        # Extract text
+        extracted_text = extract_text_from_pdf(file_data)
+        logging.debug(f"Extracted Text Type: {type(extracted_text)} | Content: {extracted_text}")
 
-        # Parse the extracted text
-        structured_content = parse_news_content(extracted_text)
+        # Normalize extracted_text into a consistent dictionary format
+        if isinstance(extracted_text, str):
+            extracted_text = {1: {"Default Section": {"author": "", "body": extracted_text}}}
+        elif isinstance(extracted_text, list):
+            extracted_text = {i+1: {"Default Section": {"author": "", "body": text}} for i, text in enumerate(extracted_text)}
+        elif isinstance(extracted_text, dict):
+            normalized_text = {}
+            for page, content in extracted_text.items():
+                if isinstance(content, str):
+                    normalized_text[page] = {"Default Section": {"author": "", "body": content}}
+                elif isinstance(content, dict):
+                    normalized_text[page] = content
+                else:
+                    logging.warning(f"Skipping page {page} due to unexpected content type: {type(content)}")
+            extracted_text = normalized_text
+        else:
+            raise ValueError("Invalid text extraction format. Expected dict, list, or string.")
+        logging.debug(f"Normalized Extracted Text: {extracted_text}")
 
-        return jsonify({
-            "news_content": structured_content,
-            "pdfco_response": {"status": "success"}
-        })
+        # Reset file pointer for image extraction
+        file_data.seek(0)
+
+        # Extract images
+        extracted_images = extract_images_from_pdf(file_data)
+        logging.debug(f"Extracted Images Type: {type(extracted_images)} | Content: {extracted_images}")
+        if not isinstance(extracted_images, dict):
+            logging.debug(f"Converting extracted_images from {type(extracted_images)} to dict")
+            extracted_images = {}
+        logging.debug(f"Final Extracted Images: {extracted_images}")
+
+        # Structuring the output
+        structured_output = []
+
+        for page_number, sections in extracted_text.items():
+            if not isinstance(sections, dict):
+                logging.warning(f"Skipping page {page_number} due to invalid section format: {sections}")
+                continue
+
+            page_data = {"page": page_number, "sections": []}
+            for section_title, section_content in sections.items():
+                if not isinstance(section_content, dict):
+                    logging.warning(f"Skipping section {section_title} on page {page_number} due to invalid format: {section_content}")
+                    continue
+
+                # Safely get images for the section
+                page_images = extracted_images.get(page_number, {})
+                if not isinstance(page_images, dict):
+                    logging.debug(f"Page {page_number} images are not a dict: {page_images}, defaulting to empty dict")
+                    page_images = {}
+                section_images = page_images.get(section_title, [])
+                if not isinstance(section_images, list):
+                    logging.debug(f"Section {section_title} images are not a list: {section_images}, defaulting to empty list")
+                    section_images = []
+                logging.debug(f"Page {page_number}, Section {section_title} - Section Images: {section_images}")
+
+                section_data = {
+                    "title": section_title,
+                    "author": section_content.get("author", ""),
+                    "body_content": section_content.get("body", ""),
+                    "relevant_images": section_images
+                }
+                page_data["sections"].append(section_data)
+
+            if page_data["sections"]:
+                structured_output.append(page_data)
+
+        logging.debug(f"Final Structured Output: {structured_output}")
+        if not structured_output:
+            return jsonify({"error": "No extractable content found in the PDF"}), 204
+
+        return jsonify({"news_pages": structured_output}), 200
 
     except Exception as e:
         logging.error(f"Error processing file: {str(e)}")
