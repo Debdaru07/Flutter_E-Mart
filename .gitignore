@@ -1,1 +1,3 @@
 /server/node_modules
+/pdf_extraction_service/virtual_env
+__pycache__/
