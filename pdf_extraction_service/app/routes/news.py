@@ -1,10 +1,17 @@
 import logging
 import io
+import re
 from flask import Blueprint, request, jsonify
 from ..services.text_extraction_service import extract_text_from_pdf
 from ..services.image_extraction_service import extract_images_from_pdf
 
 news_bp = Blueprint('news', __name__)
+
+def clean_text(text):
+    """Remove non-printable characters and normalize text."""
+    # Keep only printable characters and common punctuation, normalize Unicode
+    cleaned = re.sub(r'[^\x20-\x7E\u0980-\u09FF\n\t]', '', text)  # Bengali range + ASCII printable
+    return cleaned.strip()
 
 @news_bp.route('/extract_news', methods=['POST'])
 def extract_news():
@@ -28,64 +35,64 @@ def extract_news():
 
         # Normalize extracted_text into a consistent dictionary format
         if isinstance(extracted_text, str):
-            extracted_text = {1: {"Default Section": {"author": "", "body": extracted_text}}}
+            extracted_text = {1: {"Default Section": {"author": "", "body": clean_text(extracted_text)}}}
         elif isinstance(extracted_text, list):
-            extracted_text = {i+1: {"Default Section": {"author": "", "body": text}} for i, text in enumerate(extracted_text)}
+            extracted_text = {i+1: {"Default Section": {"author": "", "body": clean_text(text)}} for i, text in enumerate(extracted_text)}
         elif isinstance(extracted_text, dict):
             normalized_text = {}
             for page, content in extracted_text.items():
                 if isinstance(content, str):
-                    normalized_text[page] = {"Default Section": {"author": "", "body": content}}
+                    normalized_text[page] = {"Default Section": {"author": "", "body": clean_text(content)}}
                 elif isinstance(content, dict):
-                    normalized_text[page] = content
+                    normalized_text[page] = {k: {"author": v.get("author", ""), "body": clean_text(v.get("body", ""))} for k, v in content.items()}
                 else:
-                    print(f"Skipping page {page} due to unexpected content type: {type(content)}")
+                    logging.warning(f"Skipping page {page} due to unexpected content type: {type(content)}")
             extracted_text = normalized_text
         else:
             raise ValueError("Invalid text extraction format. Expected dict, list, or string.")
-        logging.debug(f"Normalized Extracted Text: {type(extracted_text)}")
+        logging.debug(f"Normalized Extracted Text: {extracted_text}")
 
         # Reset file pointer for image extraction
         file_data.seek(0)
 
         # Extract images
         extracted_images = extract_images_from_pdf(file_data)
-        print(f"Raw Extracted Images Type: {type(extracted_images)} | Content: {type(extracted_images)}")
+        logging.debug(f"Raw Extracted Images Type: {type(extracted_images)} | Content: {extracted_images}")
         if not isinstance(extracted_images, dict):
-            print(f"Converting extracted_images from {type(extracted_images)} to dict")
+            logging.warning(f"Converting extracted_images from {type(extracted_images)} to dict")
             extracted_images = {}
-        print(f"Final Extracted Images: {type(extracted_images)}")
+        logging.debug(f"Final Extracted Images: {extracted_images}")
 
         # Structuring the output
         structured_output = []
 
         for page_number, sections in extracted_text.items():
             if not isinstance(sections, dict):
+                logging.warning(f"Skipping page {page_number} due to invalid section format: {sections}")
                 continue
 
             page_data = {"page": page_number, "sections": []}
+            page_images = extracted_images.get(page_number, [])
+            logging.debug(f"Page {page_number} Images: {page_images}")
+
             for section_title, section_content in sections.items():
                 if not isinstance(section_content, dict):
-                    print(f"Skipping section {section_title} on page {page_number} due to invalid format: {section_content}")
+                    logging.warning(f"Skipping section {section_title} on page {page_number} due to invalid format: {section_content}")
                     continue
 
-                # Safely get images for the section
-                page_images = extracted_images.get(page_number, {})
-                print(f"page_images in {page_number}: {len(page_images)}")
-                logging.debug(f"Page {page_number} Images: {page_images}")
-                if not isinstance(page_images, dict):
-                    logging.debug(f"Page {page_number} images are not a dict: {page_images}, defaulting to empty dict")
-                    page_images = {}
-                section_images = page_images.get(section_title, [])
+                # Use all page images if section-specific images aren't available
+                section_images = page_images if page_images else []
+                if isinstance(page_images, dict):  # If images are section-specific
+                    section_images = page_images.get(section_title, [])
                 if not isinstance(section_images, list):
+                    logging.debug(f"Section {section_title} images are not a list: {section_images}, defaulting to empty list")
                     section_images = []
-                    logging.debug(f"Section {section_title} images are not a list: {type(section_images)}, defaulting to empty list")
 
                 section_data = {
                     "title": section_title,
                     "author": section_content.get("author", ""),
                     "body_content": section_content.get("body", ""),
-                    "relevant_images": section_images
+                    "relevant_images": section_images  # List of image data (e.g., bytes or base64)
                 }
                 page_data["sections"].append(section_data)
 
