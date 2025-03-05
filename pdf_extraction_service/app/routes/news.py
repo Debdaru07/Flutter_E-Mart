@@ -8,9 +8,29 @@ from ..services.image_extraction_service import extract_images_from_pdf
 news_bp = Blueprint('news', __name__)
 
 def clean_text(text):
-    """Remove non-printable characters and normalize text."""
-    # Keep only printable characters and common punctuation, normalize Unicode
-    cleaned = re.sub(r'[^\x20-\x7E\u0980-\u09FF\n\t]', '', text)  # Bengali range + ASCII printable
+    """Remove non-printable characters and normalize text for English and Indian regional languages."""
+    if not isinstance(text, str):
+        return ""
+    
+    # Unicode ranges for major Indian scripts
+    indian_scripts = (
+        r'\u0900-\u097F'  # Devanagari (Hindi, Marathi, etc.)
+        r'\u0980-\u09FF'  # Bengali
+        r'\u0A00-\u0A7F'  # Gurmukhi (Punjabi)
+        r'\u0A80-\u0AFF'  # Gujarati
+        r'\u0B00-\u0B7F'  # Oriya (Odia)
+        r'\u0B80-\u0BFF'  # Tamil
+        r'\u0C00-\u0C7F'  # Telugu
+        r'\u0C80-\u0CFF'  # Kannada
+        r'\u0D00-\u0D7F'  # Malayalam
+        r'\u0D80-\u0DFF'  # Sinhala (sometimes relevant)
+    )
+    
+    # Combine ranges with ASCII printable characters and common punctuation
+    pattern = rf'[^\x20-\x7E{"".join(indian_scripts)}\n\t.,!?;:-।॥]'
+    cleaned = re.sub(pattern, '', text)
+    # Replace multiple spaces/newlines with single space
+    cleaned = re.sub(r'\s+', ' ', cleaned)
     return cleaned.strip()
 
 @news_bp.route('/extract_news', methods=['POST'])
