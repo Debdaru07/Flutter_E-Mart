@@ -133,4 +133,4 @@ if __name__ == "__main__":
     logging.debug("Here")
     structured_content = parse_news_content(text, language="en")
     logging.debug("Print this")
-    print(json.dumps(structured_content, indent=2, ensure_ascii=False))
+    # print(json.dumps(structured_content, indent=2, ensure_ascii=False))
