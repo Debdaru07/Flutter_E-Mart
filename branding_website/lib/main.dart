@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'screens/features_screen.dart';
 import 'screens/how_it_works_screen.dart';
@@ -6,6 +8,10 @@ import 'screens/faq_screen.dart';
 import 'widgets/button.dart';
 import 'widgets/fontStyles.dart';
 import 'widgets/navigation_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'widgets/textUtils.dart';
+
 
 void main() {
   runApp(MyWebsite());
@@ -69,9 +75,22 @@ class HomePage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    'Early access for qualified publishers. Learn more',
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
+                  TextUtils.richText(
+                    'Early access for qualified publishers. ',
+                    textSpanList: [
+                      WidgetSpan(
+                        child: TextUtils.interactiveTextSpan(
+                          text: 'Learn more',
+                          onTap: () {
+                            log('Second part clicked!');
+                          },
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: const Color.fromARGB(255, 9, 65, 162),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

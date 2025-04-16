@@ -42,4 +42,22 @@ class AppTextStyles {
       ),
     );
   }
+
+  // static Widget richText(String mainText, {List<TextSpan>? textSpanList}) {
+  //   return RichText(
+  //     text: TextSpan(
+  //       children: [
+  //         TextSpan(
+  //           text: mainText,
+  //           style: GoogleFonts.poppins(
+  //             fontSize: 13,
+  //             color: Colors.black54,
+  //           ),
+  //         ),
+  //         if(textSpanList != null)
+  //         ...textSpanList
+  //       ],
+  //     ),
+  //   );
+  // } 
 }
