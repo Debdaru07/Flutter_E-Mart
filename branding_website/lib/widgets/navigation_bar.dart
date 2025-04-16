@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'fontStyles.dart';
+
 class NavigationBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const NavigationBarWidget({super.key});
 
@@ -9,8 +11,10 @@ class NavigationBarWidget extends StatelessWidget implements PreferredSizeWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text('NewsForge'),
       actions: [
+        SizedBox(width: 15),
+        AppTextStyles.newsForgeHeader('NewsForge'),
+        Spacer(),
         TextButton(
           onPressed: () {
             Navigator.pushNamed(context, '/features');
@@ -35,6 +39,7 @@ class NavigationBarWidget extends StatelessWidget implements PreferredSizeWidget
           },
           child: Text('FAQ', style: TextStyle(color: Colors.black)),
         ),
+        Spacer(),
         SizedBox(width: 10),
         ElevatedButton(
           onPressed: () {},

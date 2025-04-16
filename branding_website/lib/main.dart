@@ -3,6 +3,7 @@ import 'screens/features_screen.dart';
 import 'screens/how_it_works_screen.dart';
 import 'screens/pricing_screen.dart';
 import 'screens/faq_screen.dart';
+import 'widgets/fontStyles.dart';
 import 'widgets/navigation_bar.dart';
 
 void main() {
@@ -10,6 +11,8 @@ void main() {
 }
 
 class MyWebsite extends StatelessWidget {
+  const MyWebsite({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,6 +34,8 @@ class MyWebsite extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,15 +52,7 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Transform PDFs\ninto Structured\nDigital News',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                      height: 1.2,
-                    ),
-                  ),
+                  AppTextStyles.mainContentItem('Transform PDFs \ninto', ' Structured\nDigital News'),
                   SizedBox(height: 20),
                   Text(
                     'NewsForge helps publishers convert legacy PDF content\ninto modern, structured digital articles with AI-powered\nparsing and intuitive editing tools.',
@@ -68,13 +65,12 @@ class HomePage extends StatelessWidget {
                       backgroundColor: Colors.blue,
                       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     ),
-                    child: Text('Join the Waitlist'),
+                    child: Text('Join the Waitlist', style: TextStyle(color: Colors.white),),
                   ),
                   SizedBox(height: 10),
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(backgroundColor: Colors.blue),
-                    child: Text('Early access for qualified publishers. Learn more'),
+                  Text(
+                    'Early access for qualified publishers. Learn more',
+                    style: TextStyle(fontSize: 14, color: Colors.black54),
                   ),
                 ],
               ),
