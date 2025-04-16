@@ -3,6 +3,7 @@ import 'screens/features_screen.dart';
 import 'screens/how_it_works_screen.dart';
 import 'screens/pricing_screen.dart';
 import 'screens/faq_screen.dart';
+import 'widgets/button.dart';
 import 'widgets/fontStyles.dart';
 import 'widgets/navigation_bar.dart';
 
@@ -17,6 +18,7 @@ class MyWebsite extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'NewsForge',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         canvasColor: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -59,13 +61,12 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontSize: 16, color: Colors.black54),
                   ),
                   SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                    ),
-                    child: Text('Join the Waitlist', style: TextStyle(color: Colors.white),),
+                  CustomButton(
+                    label: 'Join the Waitlist', 
+                    key: key, 
+                    widthFactor: 0.28,
+                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   ),
                   SizedBox(height: 10),
                   Text(

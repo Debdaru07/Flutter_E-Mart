@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
+import 'button.dart';
 import 'fontStyles.dart';
 
 class NavigationBarWidget extends StatelessWidget implements PreferredSizeWidget {
@@ -11,6 +14,7 @@ class NavigationBarWidget extends StatelessWidget implements PreferredSizeWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Colors.white,
       actions: [
         SizedBox(width: 15),
         AppTextStyles.newsForgeHeader('NewsForge'),
@@ -41,20 +45,15 @@ class NavigationBarWidget extends StatelessWidget implements PreferredSizeWidget
         ),
         Spacer(),
         SizedBox(width: 10),
-        ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-          child: Text('Log in'),
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () => log('shift'),
+            child: Text('Log in'),
+          ),
         ),
         SizedBox(width: 10),
-        OutlinedButton(
-          onPressed: () {},
-          style: OutlinedButton.styleFrom(
-            side: BorderSide(color: Colors.blue),
-            backgroundColor: Colors.blue,
-          ),
-          child: Text('Join Waitlist'),
-        ),
+        CustomButton(label: 'Join Waitlist', key: key),
         SizedBox(width: 10),
       ],
     );

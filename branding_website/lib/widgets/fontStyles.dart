@@ -8,8 +8,8 @@ class AppTextStyles {
     return Text(
       text,
       style: GoogleFonts.roboto(
-        letterSpacing: 0.75,
-        fontSize: 28,
+        letterSpacing: 00,
+        fontSize: 30,
         fontWeight: FontWeight.w900, 
         color: const Color.fromARGB(255, 9, 65, 162),
       ),
@@ -23,7 +23,7 @@ class AppTextStyles {
           TextSpan(
             text: topText,
             style: GoogleFonts.poppins(
-              fontSize: 40,
+              fontSize: 52,
               fontWeight: FontWeight.bold,
               color: Colors.grey[900],
               height: 1.2,
@@ -32,9 +32,9 @@ class AppTextStyles {
           TextSpan(
             text: bottomText,
             style: GoogleFonts.poppins(
-              fontSize: 40, // Different font size
+              fontSize: 52, // Different font size
               fontWeight: FontWeight.bold, // Different weight
-              color: Colors.blueAccent, // Different color
+              color: const Color.fromARGB(255, 9, 65, 162), // Different color
               height: 1.2,
             ),
           ),
