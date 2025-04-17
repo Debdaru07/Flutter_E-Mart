@@ -5,12 +5,10 @@ class FeaturesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(
-          'Features Screen',
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-        ),
+    return Center(
+      child: Text(
+        'Features Screen',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.normal),
       ),
     );
   }

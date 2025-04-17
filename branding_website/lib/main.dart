@@ -34,12 +34,12 @@ class MyWebsite extends StatelessWidget {
       theme: ThemeData(
         canvasColor: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        scaffoldBackgroundColor: Colors.white
       ),
       home: Consumer<NavigationState>(
         builder: (context, navigationState, child) {
           return Scaffold(
             appBar: const NavigationBarWidget(),
+            backgroundColor: Colors.white,
             body: _getScreen(navigationState.selectedScreen),
           );
         },

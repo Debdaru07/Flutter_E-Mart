@@ -80,7 +80,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
       final isHovering = _hoverStates[route] ?? false;
 
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0), // Even spacing between items
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: isSelected ? 0 : 8), // Even spacing between items
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 300),
           opacity: isSelected || isHovering ? 1.0 : 0.6,
@@ -98,7 +98,9 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
                   color: isHovering ? Colors.blue[900] : Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Row(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       label,
@@ -107,12 +109,12 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
                       ),
                     ),
                     if (isSelected)
-                      Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        height: 2,
-                        width: 20,
-                        color: Colors.black,
-                      ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 4),
+                      height: 2,
+                      width: 80,
+                      color: Colors.blue[900],
+                    ),
                   ],
                 ),
               ),
