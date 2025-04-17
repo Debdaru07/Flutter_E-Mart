@@ -6,9 +6,6 @@ class FeaturesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('NewsForge'),
-      ),
       body: Center(
         child: Text(
           'Features Screen',
