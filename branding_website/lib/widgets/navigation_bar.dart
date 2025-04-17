@@ -35,7 +35,11 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
           elevation: 0,
           actions: [
             const SizedBox(width: 15),
-            AppTextStyles.newsForgeHeader('NewsForge'),
+            InkWell(
+              onTap: () {
+                navigationState.setSelectedScreen('/home');
+              },
+              child: AppTextStyles.newsForgeHeader('NewsForge')),
             const Spacer(),
             ..._buildNavItems(context, navigationState),
             const Spacer(),
