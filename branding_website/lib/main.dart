@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                     label: 'Join the Waitlist', 
                     key: key, 
                     widthFactor: 0.28,
-                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   ),
                   SizedBox(height: 10),
@@ -97,7 +97,7 @@ class HomePage extends StatelessWidget {
             ),
             Expanded(
               child: Image.asset(
-                'assets/newsForge_home.jpg',
+                'assets/landing_page_image.jpeg',
                 fit: BoxFit.cover,
               ),
             ),
