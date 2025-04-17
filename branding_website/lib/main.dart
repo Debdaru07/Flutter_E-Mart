@@ -95,13 +95,13 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: 40),
             Expanded(
               child: Image.asset(
-                'assets/typewriter.jpg',
+                'assets/newsForge_home.jpg',
                 fit: BoxFit.cover,
               ),
             ),
+            SizedBox(width: 40),
           ],
         ),
       ),
