@@ -8,6 +8,7 @@ import 'screens/login_screen.dart';
 import 'screens/pricing_screen.dart';
 import 'screens/faq_screen.dart';
 import 'screens/subscribe_screen.dart';
+import 'styles/appstyles.dart';
 import 'widgets/button.dart';
 import 'widgets/fontStyles.dart';
 import 'widgets/navigation_bar.dart';
@@ -95,16 +96,17 @@ class HomePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 Consumer<NavigationState>(
-                  builder: (context, navigationState, child) => CustomButton(
+                  builder: (context, navigationState, child) => 
+                  CustomButton(
                     label: 'Join the Waitlist',
                     key: null,
                     widthFactor: 0.28,
                     margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                    onPressed: () => navigationState.setSelectedScreen('/subscribe')
+                    onPressed: () => navigationState.setSelectedScreen('/subscribe'),
+                    labelStyle: AppStyles.subtitleStyle.copyWith(color: AppStyles.backgroundColor),
                   ),
                 ),
-                
                 const SizedBox(height: 10),
                 TextUtils.richText(
                   'Early access for qualified publishers. ',

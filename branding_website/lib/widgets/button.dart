@@ -6,6 +6,7 @@ class CustomButton extends StatelessWidget {
   final double? widthFactor; // Optional width factor (0.0 to 1.0)
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
+  final TextStyle? labelStyle;
 
   const CustomButton({
     required this.label,
@@ -13,6 +14,7 @@ class CustomButton extends StatelessWidget {
     this.widthFactor,
     this.margin,
     this.padding,
+    this.labelStyle,
     super.key,
   });
 
@@ -48,7 +50,7 @@ class CustomButton extends StatelessWidget {
           child: Center(
             child: Text(
               label,
-              style: TextStyle(
+              style: labelStyle ?? TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
                 color: Colors.white, // White text

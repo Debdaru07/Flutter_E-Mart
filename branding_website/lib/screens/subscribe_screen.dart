@@ -93,7 +93,8 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                             widthFactor: 0.225,
                             margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                            onPressed: () {}
+                            labelStyle: AppStyles.subtitleStyle.copyWith(color: AppStyles.backgroundColor),
+                            onPressed: () {},
                           ),
                         ],
                       )
