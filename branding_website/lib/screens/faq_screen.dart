@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../constants/appconstants.dart';
+import '../providers/navigation_provider.dart';
 import '../styles/appstyles.dart';
+import 'package:provider/provider.dart';
+
 
 class FAQScreen extends StatelessWidget {
   const FAQScreen({super.key});
@@ -28,10 +31,12 @@ class FAQScreen extends StatelessWidget {
           _buildFAQItem(AppConstants.faq2Question, AppConstants.faq2Answer),
           _buildFAQItem(AppConstants.faq3Question, AppConstants.faq3Answer),
           const SizedBox(height: 20),
-          ElevatedButton(
-            style: AppStyles.buttonStyle,
-            onPressed: () {},
-            child: Text('Join the Waitlist', style: AppStyles.buttonTextStyle),
+          Consumer<NavigationState>(
+            builder: (context, navigationState, child) => ElevatedButton(
+              style: AppStyles.buttonStyle,
+              onPressed: () => navigationState.setSelectedScreen('/subscribe'),
+              child: Text('Join the Waitlist', style: AppStyles.buttonTextStyle),
+            ),
           ),
         ],
       ),

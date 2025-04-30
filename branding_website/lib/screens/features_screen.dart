@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../constants/appconstants.dart';
+import '../providers/navigation_provider.dart';
 import '../styles/appstyles.dart';
+import 'package:provider/provider.dart';
+
 
 class FeaturesScreen extends StatelessWidget {
   const FeaturesScreen({super.key});
@@ -28,10 +31,12 @@ class FeaturesScreen extends StatelessWidget {
           _buildFeatureItem(AppConstants.feature2Title, AppConstants.feature2Desc),
           _buildFeatureItem(AppConstants.feature3Title, AppConstants.feature3Desc),
           const SizedBox(height: 20),
-          ElevatedButton(
-            style: AppStyles.buttonStyle,
-            onPressed: () {},
-            child: Text('Join the Waitlist', style: AppStyles.buttonTextStyle),
+          Consumer<NavigationState>(
+            builder: (context, navigationState, child) => ElevatedButton(
+              style: AppStyles.buttonStyle,
+              onPressed: () => navigationState.setSelectedScreen('/subscribe'),
+              child: Text('Join the Waitlist', style: AppStyles.buttonTextStyle),
+            ),
           ),
         ],
       ),

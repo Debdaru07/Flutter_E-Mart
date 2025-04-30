@@ -21,6 +21,8 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
     '/how-it-works': false,
     '/pricing': false,
     '/faq': false,
+    '/login': false,
+    '/subscribe': false,
   };
 
   @override
@@ -47,12 +49,12 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
             MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                onTap: () => log('shift'),
+                onTap: () => navigationState.setSelectedScreen('/login'),
                 child: const Text('Log in'),
               ),
             ),
             const SizedBox(width: 10),
-            CustomButton(label: 'Join Waitlist', key: widget.key),
+            CustomButton(label: 'Join Waitlist', key: widget.key, onPressed: () => navigationState.setSelectedScreen('/subscribe')),
             const SizedBox(width: 10),
           ],
         ),
@@ -75,6 +77,8 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
       {'label': 'How It Works', 'route': '/how-it-works'},
       {'label': 'Pricing', 'route': '/pricing'},
       {'label': 'FAQ', 'route': '/faq'},
+      // {'label': 'Login', 'route': '/login'},
+      // {'label': 'Subscribe', 'route': '/subscribe'},
     ];
 
     return items.map((item) {

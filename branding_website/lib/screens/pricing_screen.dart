@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../constants/appconstants.dart';
+import '../providers/navigation_provider.dart';
 import '../styles/appstyles.dart';
+import 'package:provider/provider.dart';
+
 
 class PricingScreen extends StatelessWidget {
   const PricingScreen({super.key});
@@ -28,10 +31,12 @@ class PricingScreen extends StatelessWidget {
           _buildPlanItem(AppConstants.plan2Title, AppConstants.plan2Desc, AppConstants.plan2Price),
           _buildPlanItem(AppConstants.plan3Title, AppConstants.plan3Desc, AppConstants.plan3Price),
           const SizedBox(height: 20),
-          ElevatedButton(
-            style: AppStyles.buttonStyle,
-            onPressed: () {},
-            child: Text('Join the Waitlist', style: AppStyles.buttonTextStyle),
+          Consumer<NavigationState>(
+            builder: (context, navigationState, child) => ElevatedButton(
+              style: AppStyles.buttonStyle,
+              onPressed: () => navigationState.setSelectedScreen('/subscribe'),
+              child: Text('Join the Waitlist', style: AppStyles.buttonTextStyle),
+            ),
           ),
         ],
       ),

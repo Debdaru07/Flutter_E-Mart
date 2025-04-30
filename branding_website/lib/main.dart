@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'providers/navigation_provider.dart';
 import 'screens/features_screen.dart';
 import 'screens/how_it_works_screen.dart';
+import 'screens/login_screen.dart';
 import 'screens/pricing_screen.dart';
 import 'screens/faq_screen.dart';
+import 'screens/subscribe_screen.dart';
 import 'widgets/button.dart';
 import 'widgets/fontStyles.dart';
 import 'widgets/navigation_bar.dart';
@@ -57,6 +59,10 @@ class MyWebsite extends StatelessWidget {
         return PricingScreen();
       case '/faq':
         return FAQScreen();
+      case '/login':
+        return LoginScreen();
+      case '/subscribe':
+        return SubscribeScreen();
       case '/home':
       default:
         return HomePage();
@@ -88,13 +94,17 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
                 const SizedBox(height: 30),
-                CustomButton(
-                  label: 'Join the Waitlist',
-                  key: null,
-                  widthFactor: 0.28,
-                  margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                Consumer<NavigationState>(
+                  builder: (context, navigationState, child) => CustomButton(
+                    label: 'Join the Waitlist',
+                    key: null,
+                    widthFactor: 0.28,
+                    margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    onPressed: () => navigationState.setSelectedScreen('/subscribe')
+                  ),
                 ),
+                
                 const SizedBox(height: 10),
                 TextUtils.richText(
                   'Early access for qualified publishers. ',
