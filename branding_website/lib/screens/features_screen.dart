@@ -5,6 +5,7 @@ import '../providers/navigation_provider.dart';
 import '../styles/appstyles.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/bullet_point.dart';
 import '../widgets/button.dart';
 
 
