@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/navigation_provider.dart';
+import '../styles/appstyles.dart';
 import 'button.dart';
 import 'fontStyles.dart';
 
@@ -50,11 +51,17 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () => navigationState.setSelectedScreen('/login'),
-                child: const Text('Log in'),
+                child: Text('Log in', style: AppStyles.subtitleStyle.copyWith(color: AppStyles.textColor),),
               ),
             ),
             const SizedBox(width: 10),
-            CustomButton(label: 'Join Waitlist', key: widget.key, onPressed: () => navigationState.setSelectedScreen('/subscribe')),
+            CustomButton(
+              label: 'Join Waitlist', 
+              key: widget.key, 
+              onPressed: () => navigationState.setSelectedScreen('/subscribe'),
+              labelStyle: AppStyles.subtitleStyle.copyWith(color: AppStyles.backgroundColor),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            ),
             const SizedBox(width: 10),
           ],
         ),
@@ -112,9 +119,7 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
                   children: [
                     Text(
                       label,
-                      style: TextStyle(
-                        color: isHovering ? Colors.white : Colors.black,
-                      ),
+                      style: AppStyles.subtitleStyle.copyWith(color: isHovering ? AppStyles.backgroundColor : isSelected ? AppStyles.textColor : AppStyles.secondaryTextColor ),
                     ),
                     if (isSelected)
                     Container(
