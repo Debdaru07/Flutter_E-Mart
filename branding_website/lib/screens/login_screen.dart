@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/bullet_point.dart';
 import '../widgets/button.dart';
+import 'dart:html' as html;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -78,7 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                         labelStyle: AppStyles.subtitleStyle.copyWith(color: AppStyles.backgroundColor),
-                        onPressed: () {},
+                        onPressed: () {
+                          html.window.location.href = 'https://www.linkedin.com/login';
+                        },
                       ),
                     ]
                   )
