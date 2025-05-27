@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,13 +17,13 @@ class EmailSubscriberProvider with ChangeNotifier {
   bool _loading = false;
   bool get loading => _loading;
 
-  Future<void> subscribe(String email) async {
-    
+  Future<EmailNotifierUiModel> subscribe(String email) async {
     _loading = true;
-    _emailNotifierUiModel?.isLoading = true;
-    _emailNotifierUiModel?.message = null;
-    _emailNotifierUiModel?.resultState = UiResultState.loading;
-
+    _emailNotifierUiModel = EmailNotifierUiModel(
+      isLoading: true,
+      message: null,
+      resultState: UiResultState.loading,
+    );
     notifyListeners();
 
     try {
@@ -33,24 +32,35 @@ class EmailSubscriberProvider with ChangeNotifier {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
+
       final decoded = jsonDecode(response.body);
       final result = SubscriptionResponse.fromJson(decoded);
-      log("Message: ${result.message}, Email: ${result.email}");
 
-      if (response.statusCode == 200 && result.message.toString().trim().toLowerCase() == 'subscription successful') {
-        _emailNotifierUiModel?.message = "Subscribed successfully !";
-        _emailNotifierUiModel?.resultState = UiResultState.completed;
+      if (response.statusCode == 200 &&
+          result.message.toString().trim().toLowerCase() == 'subscription successful') {
+        _emailNotifierUiModel = EmailNotifierUiModel(
+          message: "Subscribed successfully!",
+          isLoading: false,
+          resultState: UiResultState.completed,
+        );
       } else {
-        _emailNotifierUiModel?.message = "Failed: ${response.body}";
-        _emailNotifierUiModel?.resultState = UiResultState.error;
+        _emailNotifierUiModel = EmailNotifierUiModel(
+          message: "Failed: ${result.message}",
+          isLoading: false,
+          resultState: UiResultState.error,
+        );
       }
     } catch (e) {
-      _emailNotifierUiModel?.message = "Error: $e";
-      _emailNotifierUiModel?.resultState = UiResultState.error;
+      _emailNotifierUiModel = EmailNotifierUiModel(
+        message: "Error: $e",
+        isLoading: false,
+        resultState: UiResultState.error,
+      );
     }
 
     _loading = false;
-    _emailNotifierUiModel?.isLoading = false;
     notifyListeners();
+
+    return _emailNotifierUiModel!;
   }
 }

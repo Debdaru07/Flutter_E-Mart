@@ -9,6 +9,8 @@ import '../widgets/button.dart';
 import '../widgets/textfield.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/toast_widget.dart';
+
 
 class SubscribeScreen extends StatefulWidget {
   const SubscribeScreen({super.key});
@@ -81,7 +83,6 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                       const SizedBox(height: 20),
                       Consumer<EmailSubscriberProvider>(
                         builder: (context, provider, child) {
-                          log('provider.emailNotifierUiModel?.isLoading - ${provider.emailNotifierUiModel?.resultState}');
                           return Row(
                             children: [
                               Expanded(
@@ -96,14 +97,15 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                               const SizedBox(width: 12),
                               CustomButton(
                                 label: 'Subscribe',
-                                isLoading: provider.loading == true,
+                                isLoading: provider.emailNotifierUiModel?.isLoading == true,
                                 key: null,
                                 widthFactor: 0.225,
                                 margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                                 labelStyle: AppStyles.subtitleStyle.copyWith(color: AppStyles.backgroundColor),
                                 onPressed: () async {
-                                  await provider.subscribe(provider.emailController.text);
+                                  final model = await provider.subscribe(provider.emailController.text);
+                                  showEmailNotifierToast(context, model);
                                 },
                               ),
                             ],
