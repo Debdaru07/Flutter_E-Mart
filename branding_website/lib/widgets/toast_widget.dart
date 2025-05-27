@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -44,7 +46,7 @@ class _ToastContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSuccess = model.resultState == UiResultState.success;
+    final isSuccess = model.resultState == UiResultState.completed;
     final bgColor = isSuccess ? Colors.green : Colors.amber[700];
     final icon = isSuccess ? Icons.check_circle : Icons.warning_amber_rounded;
 
