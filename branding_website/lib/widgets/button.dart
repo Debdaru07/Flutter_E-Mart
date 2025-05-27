@@ -7,6 +7,7 @@ class CustomButton extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final TextStyle? labelStyle;
+  final bool isLoading; // <-- new param
 
   const CustomButton({
     required this.label,
@@ -15,6 +16,7 @@ class CustomButton extends StatelessWidget {
     this.margin,
     this.padding,
     this.labelStyle,
+    this.isLoading = false, // <-- default false
     super.key,
   });
 
@@ -29,7 +31,7 @@ class CustomButton extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click, // Changes to finger pointer on hover
       child: GestureDetector(
-        onTap: onPressed,
+        onTap: isLoading ? null : onPressed,
         child: AnimatedContainer(
           duration: Duration(milliseconds: 200), // Smooth transition for elevation
           width: buttonWidth,
@@ -48,13 +50,29 @@ class CustomButton extends StatelessWidget {
             ],
           ),
           child: Center(
-            child: Text(
-              label,
-              style: labelStyle ?? TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: Colors.white, // White text
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  label,
+                  style: labelStyle ?? TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white, // White text
+                  ),
+                ),
+                if (isLoading)
+                  Container(
+                    height: 18,
+                    width: 18,
+                    margin: const EdgeInsets.only(left: 10),
+                    child: const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 2.2,
+                    ),
+                  ),
+              ],
             ),
           ),
         ),

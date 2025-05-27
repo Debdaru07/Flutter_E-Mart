@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
+import '../providers/email_subscriber_provider.dart';
 import '../styles/appstyles.dart';
 import '../widgets/bullet_point.dart';
 import '../widgets/button.dart';
 import '../widgets/textfield.dart';
+import 'package:provider/provider.dart';
+
 
 class SubscribeScreen extends StatefulWidget {
   const SubscribeScreen({super.key});
@@ -13,7 +18,6 @@ class SubscribeScreen extends StatefulWidget {
 }
 
 class _SubscribeScreenState extends State<SubscribeScreen> {
-  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -75,28 +79,36 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AppTextField(
-                              controller: emailController,
-                              hintText: "Enter your email address",
-                              borderColor: AppStyles.primaryColor,
-                              keyboardType: TextInputType.emailAddress,
-                              prefixIcon: const Icon(Icons.email, color: AppStyles.primaryColor,),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          CustomButton(
-                            label: 'Subscribe',
-                            key: null,
-                            widthFactor: 0.225,
-                            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                            labelStyle: AppStyles.subtitleStyle.copyWith(color: AppStyles.backgroundColor),
-                            onPressed: () {},
-                          ),
-                        ],
+                      Consumer<EmailSubscriberProvider>(
+                        builder: (context, provider, child) {
+                          log('provider.emailNotifierUiModel?.isLoading - ${provider.emailNotifierUiModel?.resultState}');
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: AppTextField(
+                                  controller: provider.emailController,
+                                  hintText: "Enter your email address",
+                                  borderColor: AppStyles.primaryColor,
+                                  keyboardType: TextInputType.emailAddress,
+                                  prefixIcon: const Icon(Icons.email, color: AppStyles.primaryColor,),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              CustomButton(
+                                label: 'Subscribe',
+                                isLoading: provider.loading == true,
+                                key: null,
+                                widthFactor: 0.225,
+                                margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                                labelStyle: AppStyles.subtitleStyle.copyWith(color: AppStyles.backgroundColor),
+                                onPressed: () async {
+                                  await provider.subscribe(provider.emailController.text);
+                                },
+                              ),
+                            ],
+                          );
+                        } 
                       )
                     ],
                   ),

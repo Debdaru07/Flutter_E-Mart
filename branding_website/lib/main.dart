@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'providers/email_subscriber_provider.dart';
 import 'providers/navigation_provider.dart';
 import 'screens/features_screen.dart';
 import 'screens/how_it_works_screen.dart';
@@ -19,10 +20,17 @@ import 'widgets/textUtils.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => NavigationState(),
-      child: MyWebsite()
-    )
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NavigationState()),
+        ChangeNotifierProvider(create: (_) => EmailSubscriberProvider()),
+      ],
+      child: const MyWebsite(),
+    ),
+    // ChangeNotifierProvider(
+    //   create: (_) => NavigationState(),
+    //   child: MyWebsite()
+    // )
   );
 }
 
